@@ -2,6 +2,8 @@ package com.webapp.repositories;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -38,7 +40,7 @@ public class UserRepositoryTests {
 	@Test
 	public void findUserByUsername() {
 		String username = "ivan20";
-		User user = repository.findByUsername(username);
-		assertThat(user).isNotNull();
+		Optional <User> user = repository.findByUsername(username);
+		assertThat(user.get()).isNotNull();
 	}
 }

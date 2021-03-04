@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +31,9 @@ public class EventRepositoryTests {
 	@Test
 	public void createEvent() throws ParseException {
 		Event event = new Event();
-		Location location = locationRepository.findByName("Burgas");
+		Optional <Location> location = locationRepository.findByName("Burgas");
 		event.setName("Software Development");
-		event.setLocation(location);
+		event.setLocation(location.get());
 		event.setTickets(20);
 		event.setPrice(25.00);
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");

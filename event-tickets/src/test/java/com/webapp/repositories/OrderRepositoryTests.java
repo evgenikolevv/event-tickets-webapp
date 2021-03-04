@@ -35,10 +35,10 @@ public class OrderRepositoryTests {
 	@Test
 	public void createOrder() {
 		String username = "ivan20";
-		User user = userRepository.findByUsername(username);
+		Optional <User> user = userRepository.findByUsername(username);
 		Optional<Event> event = eventRepository.findById(1L);
 		Order order = new Order();
-		order.setUser(user);
+		order.setUser(user.get());
 		order.setEvent(event.get());
 		Order savedOrder = orderRepository.save(order);
 		
