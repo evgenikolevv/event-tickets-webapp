@@ -2,6 +2,7 @@ package com.webapp.controllers;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,14 +33,27 @@ public class EventController {
 	@GetMapping
 	public String viewEventsPage(Model model) {
 		try {
-			List<Event> events = eventService.getEvents();
-			model.addAttribute("listEvents",events);
+			
+			return findPaginated(1,model);
+		
 		}catch(IllegalStateException e) {
 			throw new ResponseStatusException(
 					HttpStatus.NOT_FOUND, e.getMessage(), e
 					);
 		}
+	}
+	
+	
+	@GetMapping("/page/{pageNo}")
+	public String findPaginated(@PathVariable(value="pageNo") int pageNo, Model model) {
+		int pageSize = 5;
+		Page<Event> page = eventService.findPaginated(pageNo, pageSize);
+		List<Event> events = page.getContent();
 		
+		model.addAttribute("currentPage", pageNo);
+		model.addAttribute("totalPages", page.getTotalPages());
+		model.addAttribute("totalItems", page.getTotalElements());
+		model.addAttribute("listEvents", events);
 		return "events";
 	}
 	
