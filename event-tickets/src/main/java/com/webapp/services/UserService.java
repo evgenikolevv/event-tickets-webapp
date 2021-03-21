@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.webapp.entities.User;
 import com.webapp.repositories.UserRepository;
@@ -15,10 +16,12 @@ import com.webapp.repositories.UserRepository;
 public class UserService {
 
 	private final UserRepository userRepository;
+	private final PasswordEncoder passwordEncoder;
 	
 	@Autowired
-	public UserService(UserRepository userRepository) {
+	public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
 		this.userRepository = userRepository;
+		this.passwordEncoder = passwordEncoder;
 	}
 	
 	
@@ -27,6 +30,7 @@ public class UserService {
 				.ifPresentOrElse((value) -> {
 					throw new IllegalStateException("Username " + user.getUsername() + " is taken!");
 				}, () ->{
+					user.setPassword(passwordEncoder.encode(user.getPassword()));
 					userRepository.save(user);
 				});
 	}

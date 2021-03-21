@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeLeaf.org">
+<html lang="en" xmlns:th="http://www.thymeLeaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
@@ -20,13 +20,27 @@
           					Events
         				</a>
         				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          					<a class="dropdown-item" href="#">My Events</a>
           					<a class="dropdown-item" th:href="@{/events}">All Events</a>
         				</div>
       				</li>
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="navbar-dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							Orders
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+							<a class="dropdown-item" href="#">My Orders</a>
+							<a sec:authorize="hasAuthority('ADMIN')" class="dropdown-item" href="#">All Orders</a>
+						</div>
+					</li>
+					<li sec:authorize="hasAuthority('ADMIN')">
+						<a class="nav-link" href="#">All Users</a>
+					</li>
       				<li class="nav-item">
        					<a class="nav-link" href="#">Profile</a>
       				</li>
+					<li class="nav-item">
+						<a class="nav-link" th:href="@{/logout}" >Logout</a>
+					</li>
     			</ul>
   			</div>
 		</nav>

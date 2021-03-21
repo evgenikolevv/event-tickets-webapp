@@ -3,8 +3,9 @@ package com.webapp.services;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
 import com.webapp.entities.Event;
 import com.webapp.entities.Order;
 import com.webapp.entities.User;
@@ -26,7 +27,17 @@ public class OrderService {
 		this.userRepository = userRepository;
 	}
 	
-	public void createOrder(Long eventId, String username, int tickets) {
+	public void createOrder(Long eventId, int tickets) {
+		//Retrieve logged user
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String username;
+
+		if (principal instanceof UserDetails) {
+			username = ((UserDetails) principal).getUsername();
+		}else {
+			username = principal.toString();
+		}
+
 		Optional<User> user = userRepository.findByUsername(username);
 		Optional<Event> event = eventRepository.findById(eventId);
 		
@@ -51,7 +62,7 @@ public class OrderService {
 		
 		int totalTickets = event.getTickets();
 		totalTickets = totalTickets - tickets;
-		if (totalTickets< 0) {
+		if (totalTickets < 0) {
 			throw new IllegalStateException("Not enough tickets");
 		}
 		

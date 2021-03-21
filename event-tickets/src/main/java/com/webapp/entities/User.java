@@ -3,15 +3,7 @@ package com.webapp.entities;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name="users")
@@ -32,11 +24,11 @@ public class User {
 	@Column(name="password")
 	private String password;
 	
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(
 			name = "users_roles",
 			joinColumns = { @JoinColumn (name = "user_id" ) },
-			inverseJoinColumns = { @JoinColumn( name="event_id" ) }
+			inverseJoinColumns = { @JoinColumn( name="role_id" ) }
 			)
 	private Set<Role> roles = new HashSet<>();
 	

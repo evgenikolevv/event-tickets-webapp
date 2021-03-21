@@ -42,7 +42,7 @@
 	<form  th:action = "@{/orders/order}" method = "POST" action="#">
   		<div class="form-group">
   			<input type="hidden" name="eventId" th:value="${event.id}">
-  			<input type="hidden" name="username" value="ivan20">
+<!--  			<input type="hidden" name="username" value="ivan20">-->
     		<label for="order">Order</label>
     		<input type="number" min="1" max="10" name = "tickets" class="form-control mb-3">
   		<button type="submit" class="btn btn-primary">order</button>

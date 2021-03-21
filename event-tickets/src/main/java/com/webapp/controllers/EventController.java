@@ -21,72 +21,72 @@ import com.webapp.services.LocationService;
 @RequestMapping("/events")
 public class EventController {
 
-	private final EventService eventService;
-	private final LocationService locationService;
-	
-	@Autowired
-	public EventController(EventService eventService, LocationService locationService) {
-		this.eventService = eventService;
-		this.locationService = locationService;
-	}
-	
-	@GetMapping
-	public String viewEventsPage(Model model) {
-		try {
-			
-			return findPaginated(1,model);
-		
-		}catch(IllegalStateException e) {
-			throw new ResponseStatusException(
-					HttpStatus.NOT_FOUND, e.getMessage(), e
-					);
-		}
-	}
-	
-	
-	@GetMapping("/page/{pageNo}")
-	public String findPaginated(@PathVariable(value="pageNo") int pageNo, Model model) {
-		int pageSize = 5;
-		Page<Event> page = eventService.findPaginated(pageNo, pageSize);
-		List<Event> events = page.getContent();
-		
-		model.addAttribute("currentPage", pageNo);
-		model.addAttribute("totalPages", page.getTotalPages());
-		model.addAttribute("totalItems", page.getTotalElements());
-		model.addAttribute("listEvents", events);
-		return "events";
-	}
-	
-	@GetMapping(path = "{id}")
-	public String viewEvent(@PathVariable("id") Long eventId, Model model) {
-		try {
-			Event event = eventService.getEvent(eventId);
-			model.addAttribute("event",event);
-		}catch (IllegalStateException e) {
-			throw new ResponseStatusException(
-					HttpStatus.NOT_FOUND, e.getMessage(), e
-					);
-		}
-		
-		return "event";
-	}
-	
-	@GetMapping("/edit/{id}")
-	public ModelAndView viewEventEditPage(@PathVariable("id") Long eventId) {
-		ModelAndView modelAndView = new ModelAndView("event-edit");
-		modelAndView.addObject("event", eventService.getEvent(eventId));
-		modelAndView.addObject("locations", locationService.getLocations());
-		return modelAndView;
-	}
-	
-	@PostMapping("/update")
-	public String editEvent(@ModelAttribute Event event){
-		try {
-			eventService.updateEvent(event);
-		}catch(IllegalStateException e) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e );
-		}
-		return "redirect:/events";
-	}
-	
+    private final EventService eventService;
+    private final LocationService locationService;
+
+    @Autowired
+    public EventController(EventService eventService, LocationService locationService) {
+        this.eventService = eventService;
+        this.locationService = locationService;
+    }
+
+    @GetMapping
+    public String viewEventsPage(Model model) {
+        try {
+
+            return findPaginated(1, model);
+
+        } catch (IllegalStateException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, e.getMessage(), e
+            );
+        }
+    }
+
+
+    @GetMapping("/page/{pageNo}")
+    public String findPaginated(@PathVariable(value = "pageNo") int pageNo, Model model) {
+        int pageSize = 5;
+        Page<Event> page = eventService.findPaginated(pageNo, pageSize);
+        List<Event> events = page.getContent();
+
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("totalItems", page.getTotalElements());
+        model.addAttribute("listEvents", events);
+        return "events/events";
+    }
+
+    @GetMapping(path = "{id}")
+    public String viewEvent(@PathVariable("id") Long eventId, Model model) {
+        try {
+            Event event = eventService.getEvent(eventId);
+            model.addAttribute("event", event);
+        } catch (IllegalStateException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, e.getMessage(), e
+            );
+        }
+
+        return "events/event";
+    }
+
+    @GetMapping("/edit/{id}")
+    public ModelAndView viewEventEditPage(@PathVariable("id") Long eventId) {
+        ModelAndView modelAndView = new ModelAndView("events/event-edit");
+        modelAndView.addObject("event", eventService.getEvent(eventId));
+        modelAndView.addObject("locations", locationService.getLocations());
+        return modelAndView;
+    }
+
+    @PostMapping("/update")
+    public String editEvent(@ModelAttribute Event event) {
+        try {
+            eventService.updateEvent(event);
+        } catch (IllegalStateException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
+        return "redirect:/events";
+    }
+
 }

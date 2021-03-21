@@ -28,11 +28,11 @@ public class OrderController {
 	
 	
 	@PostMapping(path = "/order")
-	public String createOrder(@RequestParam(value ="eventId") Long eventId,
-							  @RequestParam String username,
+	public String createOrder(@RequestParam("eventId") Long eventId,
 							  @RequestParam int tickets) {
 		try {
-			orderService.createOrder(eventId, username,tickets);
+
+			orderService.createOrder(eventId, tickets);
 		}catch(IllegalStateException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, e.getMessage(), e );
 		}
